@@ -411,8 +411,10 @@ function updateMini(){
 
 /* ---------- 音訊視覺化(Web Audio 頻譜環) ---------- */
 let actx=null, analyser=null, vizRAF=0;
+// 手機鎖屏時系統會暫停 Web Audio 導致音樂中斷,所以行動裝置不啟用頻譜
+const NO_VIZ=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.userAgent));
 function initViz(){
-  if(actx) return;
+  if(actx||NO_VIZ) return;
   try{
     actx=new (window.AudioContext||window.webkitAudioContext)();
     const src=actx.createMediaElementSource(audio);
@@ -455,6 +457,11 @@ function stopViz(){
   const cv=$('viz');
   if(cv) cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
 }
+// 背景分頁時停掉動畫省電,回前景再恢復
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden) stopViz();
+  else if(playing) startViz();
+});
 let tt;
 function showToast(m){
   const e=$('toast');e.textContent=m;e.classList.add('show');
