@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>花彘醺 Playlist</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0e0404;--surface:#1a0808;--card:#180606;--gold:#d4a843;--red:#8b1c0e;--accent:#c8953a;--text:#f5f0e8;--muted:#8a7060;--border:#3a1a10}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'SF Pro Display','Segoe UI',sans-serif;min-height:100dvh;overflow-x:hidden}
+
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.tab-btn{flex:1;padding:12px 0;background:none;border:none;color:var(--muted);font-size:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:color .2s;letter-spacing:1px}
+.tab-btn.active{color:var(--gold)}
+.tab-btn svg{width:20px;height:20px}
+
+.page{display:none;padding:0 0 80px;min-height:100dvh}
+.page.active{display:block}
+
+.header{padding:52px 20px 16px;background:linear-gradient(180deg,#2a0808 0%,var(--bg) 100%)}
+.logo{font-family:'Noto Serif TC',STSong,serif;font-size:28px;font-weight:900;background:linear-gradient(180deg,#f0cc6e,#d4a843,#a8722a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:8px}
+.sub{font-size:10px;letter-spacing:4px;color:var(--accent);margin-top:5px;opacity:.7}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--red),var(--gold),var(--red),transparent);margin-top:14px;opacity:.45}
+
+.search-wrap{padding:12px 20px 2px}
+#search{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 14px;color:var(--text);font-size:14px;outline:none;-webkit-appearance:none;appearance:none}
+#search::placeholder{color:var(--muted)}
+#search:focus{border-color:var(--accent)}
+
+.pl-header{padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between}
+.pl-label{font-size:10px;letter-spacing:3px;color:var(--accent);opacity:.65}
+.pl-count{font-size:11px;color:var(--muted)}
+
+.track-list{padding:0 14px}
+.track-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;margin-bottom:7px;background:var(--card);cursor:pointer;border:1px solid transparent;transition:background .15s}
+.track-item.playing{border-color:var(--red);background:rgba(139,28,14,.18)}
+.track-item:active{opacity:.7}
+.track-num{width:26px;text-align:center;font-size:12px;color:var(--muted);flex-shrink:0;font-family:monospace}
+.track-item.playing .track-num{color:var(--gold)}
+.track-info{flex:1;min-width:0}
+.track-name{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.track-dur{font-size:11px;color:var(--muted);margin-top:2px}
+
+.eq{display:none;align-items:flex-end;gap:2px;height:16px}
+.track-item.playing .eq{display:flex}
+.track-item.playing.paused .eq{display:none}
+.track-item.playing .ns{display:none}
+.track-item.playing.paused .ns{display:inline}
+.bar{width:2.5px;background:var(--gold);border-radius:2px;animation:eq .75s ease-in-out infinite}
+.bar:nth-child(1){height:5px;animation-delay:0s}.bar:nth-child(2){height:13px;animation-delay:.15s}
+.bar:nth-child(3){height:9px;animation-delay:.3s}.bar:nth-child(4){height:15px;animation-delay:.1s}
+@keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
+
+#page-player{padding:0 0 80px}
+.np-bg{background:linear-gradient(160deg,#200808 0%,#160404 55%,var(--bg) 100%);padding:52px 0 0;min-height:100dvh;display:flex;flex-direction:column}
+
+.album-wrap{margin:20px auto 22px;width:min(270px,70vw);height:min(270px,70vw);border-radius:20px;box-shadow:0 16px 50px rgba(0,0,0,.7);background:linear-gradient(135deg,#2a0808,#4a1a08);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.album-wrap.playing{animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 16px 50px rgba(0,0,0,.7)}50%{box-shadow:0 16px 70px rgba(139,28,14,.45)}}
+.album-wrap svg{width:65%;height:65%;opacity:.85}
+
+.np-info{padding:0 22px;text-align:center;flex-shrink:0}
+.np-title{font-family:'Noto Serif TC',STSong,serif;font-size:20px;font-weight:700;background:linear-gradient(180deg,#f0cc6e,#d4a843);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-pos{color:var(--muted);font-size:12px;margin-top:5px;letter-spacing:1px}
+
+.prog-section{padding:20px 22px 6px;flex-shrink:0}
+.prog-wrap{position:relative;height:3px;background:rgba(255,255,255,.1);border-radius:3px;cursor:pointer;touch-action:none}
+.prog-wrap::before{content:'';position:absolute;left:0;right:0;top:-14px;bottom:-14px}
+.prog-fill{position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:3px}
+.prog-thumb{position:absolute;top:50%;transform:translate(-50%,-50%);width:14px;height:14px;border-radius:50%;background:var(--gold)}
+.time-row{display:flex;justify-content:space-between;margin-top:7px;font-size:11px;color:var(--muted);font-family:monospace}
+
+.controls{padding:8px 22px 18px;flex-shrink:0}
+.ctrl-row{display:flex;align-items:center;justify-content:space-between}
+.ctrl-btn{background:none;border:none;color:var(--text);cursor:pointer;padding:10px;border-radius:50%;transition:transform .1s}
+.ctrl-btn:active{transform:scale(.85)}
+.ctrl-btn.dim{color:var(--muted)}
+.ctrl-btn.on{color:var(--gold)}
+.ctrl-btn svg{display:block}
+.play-btn{width:66px;height:66px;background:var(--red);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(139,28,14,.6);transition:transform .1s}
+.play-btn:active{transform:scale(.9)}
+
+.vol-row{display:flex;align-items:center;gap:12px;margin-top:14px;padding:0 4px}
+.vol-row svg{flex-shrink:0;color:var(--muted);width:16px;height:16px}
+input[type=range]{flex:1;-webkit-appearance:none;height:3px;border-radius:3px;background:rgba(255,255,255,.12);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--gold);cursor:pointer}
+
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(20,5,5,.95);border:1px solid var(--border);color:var(--text);padding:9px 18px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* mini player */
+.mini{position:fixed;left:10px;right:10px;bottom:calc(62px + env(safe-area-inset-bottom));background:rgba(26,8,8,.97);border:1px solid var(--border);border-radius:14px;display:none;align-items:center;gap:6px;padding:9px 12px;z-index:99;box-shadow:0 6px 24px rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mini.show{display:flex}
+.mini-info{flex:1;min-width:0;cursor:pointer}
+.mini-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--gold)}
+.mini-sub{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+.mini-btn{background:none;border:none;color:var(--text);padding:8px;cursor:pointer;border-radius:50%;flex-shrink:0;transition:transform .1s}
+.mini-btn:active{transform:scale(.85)}
+.mini-btn svg{display:block}
+#page-list.page{padding-bottom:160px}
+
+/* visualizer */
+.album-wrap{position:relative;overflow:hidden}
+#viz{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+</style>
+</head>
+<body>
+
+<div class="page active" id="page-list">
+  <div class="header">
+    <div class="logo">花彘醺</div>
+    <div class="sub">FORMOSA PAIRING ROOM · PLAYLIST</div>
+    <div class="rule"></div>
+  </div>
+  <div class="search-wrap"><input id="search" type="search" placeholder="搜尋曲目…" autocomplete="off"></div>
+  <div class="pl-header">
+    <span class="pl-label">TRACK LIST</span>
+    <span class="pl-count" id="pl-count">19 首</span>
+  </div>
+  <div class="track-list" id="track-list"></div>
+</div>
+
+<div class="page" id="page-player">
+  <div class="np-bg">
+    <div class="album-wrap" id="album-art">
+      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path d="M100 10 Q105 55 110 80 Q120 120 105 160 Q100 175 95 160 Q80 120 90 80 Q95 55 100 10Z" fill="#5a1010" opacity="0.55"/>
+        <path d="M100 80 Q80 65 55 58 Q30 52 15 60 Q25 75 45 80 Q70 88 100 80Z" fill="#5a1010" opacity="0.45"/>
+        <path d="M100 80 Q120 65 145 58 Q170 52 185 60 Q175 75 155 80 Q130 88 100 80Z" fill="#5a1010" opacity="0.45"/>
+        <g transform="translate(100,50)"><ellipse cx="0" cy="-14" rx="9" ry="14" fill="#8b1c1c" opacity="0.9" transform="rotate(0)"/><ellipse cx="0" cy="-14" rx="9" ry="14" fill="#8b1c1c" opacity="0.9" transform="rotate(72)"/><ellipse cx="0" cy="-14" rx="9" ry="14" fill="#8b1c1c" opacity="0.9" transform="rotate(144)"/><ellipse cx="0" cy="-14" rx="9" ry="14" fill="#8b1c1c" opacity="0.9" transform="rotate(216)"/><ellipse cx="0" cy="-14" rx="9" ry="14" fill="#8b1c1c" opacity="0.9" transform="rotate(288)"/><circle r="6" fill="#d4a843"/></g>
+        <g transform="translate(52,118)"><ellipse cx="0" cy="-11" rx="7" ry="11" fill="#7a1515" opacity="0.85" transform="rotate(0)"/><ellipse cx="0" cy="-11" rx="7" ry="11" fill="#7a1515" opacity="0.85" transform="rotate(72)"/><ellipse cx="0" cy="-11" rx="7" ry="11" fill="#7a1515" opacity="0.85" transform="rotate(144)"/><ellipse cx="0" cy="-11" rx="7" ry="11" fill="#7a1515" opacity="0.85" transform="rotate(216)"/><ellipse cx="0" cy="-11" rx="7" ry="11" fill="#7a1515" opacity="0.85" transform="rotate(288)"/><circle r="4.5" fill="#d4a843"/></g>
+        <g transform="translate(148,118)"><ellipse cx="0" cy="-10" rx="6.5" ry="10" fill="#6b1010" opacity="0.8" transform="rotate(0)"/><ellipse cx="0" cy="-10" rx="6.5" ry="10" fill="#6b1010" opacity="0.8" transform="rotate(72)"/><ellipse cx="0" cy="-10" rx="6.5" ry="10" fill="#6b1010" opacity="0.8" transform="rotate(144)"/><ellipse cx="0" cy="-10" rx="6.5" ry="10" fill="#6b1010" opacity="0.8" transform="rotate(216)"/><ellipse cx="0" cy="-10" rx="6.5" ry="10" fill="#6b1010" opacity="0.8" transform="rotate(288)"/><circle r="4" fill="#d4a843"/></g>
+        <ellipse cx="30" cy="40" rx="4" ry="6" fill="#7a1515" opacity="0.45" transform="rotate(25,30,40)"/>
+        <ellipse cx="165" cy="70" rx="3.5" ry="5.5" fill="#7a1515" opacity="0.4" transform="rotate(-30,165,70)"/>
+        <text x="100" y="196" text-anchor="middle" font-family="'Noto Serif TC',STSong,serif" font-size="17" font-weight="900" fill="#d4a843" letter-spacing="4" opacity="0.9">花彘醺</text>
+      </svg>
+      <canvas id="viz"></canvas>
+    </div>
+    <div class="np-info">
+      <div class="np-title" id="np-title">Midnight Drive</div>
+      <div class="np-pos" id="np-pos">第 1 首 · PLAYLIST</div>
+    </div>
+    <div class="prog-section">
+      <div class="prog-wrap" id="prog-wrap">
+        <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+        <div class="prog-thumb" id="prog-thumb" style="left:0%"></div>
+      </div>
+      <div class="time-row"><span id="t-cur">0:00</span><span id="t-tot">0:00</span></div>
+    </div>
+    <div class="controls">
+      <div class="ctrl-row">
+        <button class="ctrl-btn dim" id="btn-shuffle" onclick="toggleShuffle()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+        </button>
+        <button class="ctrl-btn" onclick="prevTrack()">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="play-btn" onclick="togglePlay()">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path id="play-path" d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="ctrl-btn" onclick="nextTrack()">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+        <button class="ctrl-btn on" id="btn-repeat" onclick="toggleRepeat()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        </button>
+      </div>
+      <div class="vol-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/></svg>
+        <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mini" id="mini">
+  <div class="mini-info" onclick="switchTab('player')">
+    <div class="mini-title" id="mini-title">—</div>
+    <div class="mini-sub" id="mini-sub"></div>
+  </div>
+  <button class="mini-btn" onclick="prevTrack()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+  </button>
+  <button class="mini-btn" onclick="togglePlay()">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path id="mini-play-path" d="M8 5v14l11-7z"/></svg>
+  </button>
+  <button class="mini-btn" onclick="nextTrack()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+  </button>
+</div>
+
+<nav class="tab-bar">
+  <button class="tab-btn active" id="tab-list" onclick="switchTab('list')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>歌單
+  </button>
+  <button class="tab-btn" id="tab-player" onclick="switchTab('player')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>正在播放
+  </button>
+</nav>
+
+<div class="toast" id="toast"></div>
+<audio id="audio" preload="none"></audio>
+
+<script>
+const FILES=[
+  "1.Midnight Drive.mp3","2.Slow Burn (1).mp3","3.Electric Hush.mp3",
+  "4.Electric Hush (1).mp3","5.Velvet Static.mp3","6.Blue Hour (1).mp3",
+  "7.Fade Away (Midnight Smoke Jazz Version).mp3","8.Ivory Nights (1).mp3",
+  "9.Last Call (Remastered).mp3","10.Saltwater Serenade.mp3",
+  "11.Saltwater Serenade (1).mp3","12.Quiet Confessions.mp3",
+  "13.Ivory Nights.mp3","14.Coconut Sky.mp3","15.Whiskey & Velvet.mp3",
+  "16.Slow Pour.mp3","17.City Lights Blur.mp3","18.Smooth Talk.mp3",
+  "19.Whiskey & Velvet (1).mp3"
+];
+const NAMES=FILES.map(f=>f.replace(/^\d+\./,'').replace(/\.mp3$/i,'').trim());
+const $=id=>document.getElementById(id);
+const audio=$('audio');
+const durs=new Array(FILES.length).fill(null);
+let cur=0,playing=false,shuffle=false,repeat=1,seeking=false;
+let histStack=[],pendingResume=false,resumeTime=0,items=[];
+
+const fmt=s=>(!s||!isFinite(s))?'–':`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+/* ---------- 狀態保存與還原 ---------- */
+const SKEY='hzx-player-v1';
+function saveState(){
+  try{localStorage.setItem(SKEY,JSON.stringify({cur,time:audio.currentTime||0,vol:audio.volume,shuffle,repeat}));}catch(e){}
+}
+(function restore(){
+  try{
+    const s=JSON.parse(localStorage.getItem(SKEY)||'null');
+    if(!s)return;
+    if(Number.isInteger(s.cur)&&s.cur>=0&&s.cur<FILES.length)cur=s.cur;
+    resumeTime=+s.time||0;
+    shuffle=!!s.shuffle;
+    repeat=Number.isInteger(s.repeat)?s.repeat:1;
+    if(typeof s.vol==='number')audio.volume=Math.max(0,Math.min(1,s.vol));
+  }catch(e){}
+})();
+
+/* ---------- 歌單(只建一次,之後只改 class) ---------- */
+function buildList(){
+  $('track-list').innerHTML=FILES.map((f,i)=>`
+    <div class="track-item" data-i="${i}">
+      <div class="track-num"><span class="ns">${i+1}</span><div class="eq"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div>
+      <div class="track-info"><div class="track-name">${NAMES[i]}</div><div class="track-dur">${fmt(durs[i])}</div></div>
+    </div>`).join('');
+  items=[...$('track-list').children];
+  items.forEach(el=>el.addEventListener('click',()=>playIdx(+el.dataset.i)));
+}
+function updateListState(){
+  items.forEach((el,i)=>{
+    el.classList.toggle('playing',i===cur);
+    el.classList.toggle('paused',i===cur&&!playing);
+  });
+}
+function updateDur(i){
+  if(items[i]&&durs[i])items[i].querySelector('.track-dur').textContent=fmt(durs[i]);
+}
+
+/* ---------- 搜尋 ---------- */
+$('search').addEventListener('input',function(){
+  const q=this.value.trim().toLowerCase();
+  let n=0;
+  items.forEach((el,i)=>{
+    const show=!q||NAMES[i].toLowerCase().includes(q);
+    el.style.display=show?'':'none';
+    if(show)n++;
+  });
+  $('pl-count').textContent=q?`${n} / ${FILES.length} 首`:`${FILES.length} 首`;
+});
+
+/* ---------- 播放控制 ---------- */
+function playIdx(i,resume){
+  cur=i;
+  audio.src=FILES[i];
+  pendingResume=!!(resume&&resumeTime>3);
+  audio.play().catch(()=>{});
+  playing=true;
+  updateNP();updateListState();updateMediaMeta();saveState();
+}
+function togglePlay(){
+  if(!audio.currentSrc&&!audio.src){playIdx(cur,true);return;}
+  if(audio.paused)audio.play().catch(()=>{});else audio.pause();
+}
+function randIdx(){
+  if(FILES.length<2)return cur;
+  let i;do{i=Math.floor(Math.random()*FILES.length);}while(i===cur);
+  return i;
+}
+function nextTrack(){
+  if(shuffle){histStack.push(cur);if(histStack.length>50)histStack.shift();playIdx(randIdx());}
+  else playIdx((cur+1)%FILES.length);
+}
+function prevTrack(){
+  if(audio.currentTime>3){audio.currentTime=0;return;}
+  if(shuffle&&histStack.length)playIdx(histStack.pop());
+  else playIdx((cur-1+FILES.length)%FILES.length);
+}
+
+audio.addEventListener('ended',()=>{
+  if(repeat===2){audio.currentTime=0;audio.play();return;}
+  if(shuffle){histStack.push(cur);playIdx(randIdx());return;}
+  if(cur<FILES.length-1)playIdx(cur+1);
+  else if(repeat===1)playIdx(0);
+  else{playing=false;updateNP();updateListState();}
+});
+audio.addEventListener('error',()=>{if(audio.src){playing=false;updateBtn();updateListState();showToast('找不到音檔:'+FILES[cur]);}});
+audio.addEventListener('play',()=>{
+  playing=true;updateBtn();updateListState();
+  initViz();
+  if(actx && actx.state==='suspended') actx.resume();
+  startViz();
+});
+audio.addEventListener('pause',()=>{playing=false;updateBtn();updateListState();saveState();stopViz();});
+audio.addEventListener('loadedmetadata',()=>{
+  durs[cur]=audio.duration;updateDur(cur);
+  $('t-tot').textContent=fmt(audio.duration);
+  if(pendingResume){
+    if(resumeTime<audio.duration-1)audio.currentTime=resumeTime;
+    pendingResume=false;
+  }
+});
+
+let lastSave=0;
+audio.addEventListener('timeupdate',()=>{
+  if(seeking||!audio.duration)return;
+  const p=(audio.currentTime/audio.duration)*100;
+  $('prog-fill').style.width=p+'%';
+  $('prog-thumb').style.left=p+'%';
+  $('t-cur').textContent=fmt(audio.currentTime);
+  $('t-tot').textContent=fmt(audio.duration);
+  const now=Date.now();
+  if(now-lastSave>5000){saveState();lastSave=now;}
+  if('mediaSession' in navigator&&navigator.mediaSession.setPositionState){
+    try{navigator.mediaSession.setPositionState({duration:audio.duration,position:audio.currentTime,playbackRate:audio.playbackRate});}catch(e){}
+  }
+});
+window.addEventListener('pagehide',saveState);
+
+/* ---------- 進度條(Pointer Events,滑鼠/觸控通用) ---------- */
+const pw=$('prog-wrap');
+function getP(e){
+  const r=pw.getBoundingClientRect();
+  return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));
+}
+function applySeek(e){
+  const p=getP(e)*100;
+  $('prog-fill').style.width=p+'%';
+  $('prog-thumb').style.left=p+'%';
+  if(audio.duration)$('t-cur').textContent=fmt(getP(e)*audio.duration);
+}
+pw.addEventListener('pointerdown',e=>{seeking=true;pw.setPointerCapture(e.pointerId);applySeek(e);});
+pw.addEventListener('pointermove',e=>{if(seeking)applySeek(e);});
+pw.addEventListener('pointerup',e=>{
+  if(!seeking)return;
+  seeking=false;
+  if(audio.duration){audio.currentTime=getP(e)*audio.duration;saveState();}
+});
+pw.addEventListener('pointercancel',()=>{seeking=false;});
+
+/* ---------- 音量 ---------- */
+$('volume').value=audio.volume;
+$('volume').addEventListener('input',function(){audio.volume=+this.value;});
+
+/* ---------- 模式切換 ---------- */
+function toggleShuffle(){
+  shuffle=!shuffle;histStack=[];
+  $('btn-shuffle').classList.toggle('on',shuffle);
+  $('btn-shuffle').classList.toggle('dim',!shuffle);
+  showToast(shuffle?'隨機 ON':'隨機 OFF');saveState();
+}
+function toggleRepeat(){
+  repeat=(repeat+1)%3;
+  $('btn-repeat').classList.toggle('on',repeat>0);
+  showToast(['重複關閉','全部重複','單曲重複'][repeat]);saveState();
+}
+
+/* ---------- UI 更新 ---------- */
+function updateNP(){
+  $('np-title').textContent=NAMES[cur];
+  $('np-pos').textContent=`第 ${cur+1} 首 · PLAYLIST`;
+  updateBtn();
+}
+function updateBtn(){
+  $('play-path').setAttribute('d',playing?'M6 19h4V5H6v14zm8-14v14h4V5h-4z':'M8 5v14l11-7z');
+  $('album-art').classList.toggle('playing',playing);
+  updateMini();
+}
+let currentPage='list';
+function switchTab(t){
+  currentPage=t;
+  ['list','player'].forEach(p=>{
+    $('page-'+p).classList.toggle('active',p===t);
+    $('tab-'+p).classList.toggle('active',p===t);
+  });
+  updateMini();
+}
+function updateMini(){
+  const show = currentPage==='list' && !!(audio.src||audio.currentSrc);
+  $('mini').classList.toggle('show',show);
+  if(show){
+    $('mini-title').textContent = NAMES[cur];
+    $('mini-sub').textContent = playing ? '播放中' : '已暫停';
+    $('mini-play-path').setAttribute('d', playing?'M6 19h4V5H6v14zm8-14v14h4V5h-4z':'M8 5v14l11-7z');
+  }
+}
+
+/* ---------- 音訊視覺化(Web Audio 頻譜環) ---------- */
+let actx=null, analyser=null, vizRAF=0;
+function initViz(){
+  if(actx) return;
+  try{
+    actx=new (window.AudioContext||window.webkitAudioContext)();
+    const src=actx.createMediaElementSource(audio);
+    analyser=actx.createAnalyser();
+    analyser.fftSize=128;
+    analyser.smoothingTimeConstant=0.78;
+    src.connect(analyser);
+    analyser.connect(actx.destination);
+  }catch(e){ actx=null; analyser=null; }
+}
+function startViz(){
+  const cv=$('viz');
+  if(!cv || !analyser) return;
+  const ctx2=cv.getContext('2d');
+  const dpr=window.devicePixelRatio||1;
+  const sz=cv.clientWidth||270;
+  cv.width=sz*dpr; cv.height=sz*dpr;
+  const data=new Uint8Array(analyser.frequencyBinCount);
+  cancelAnimationFrame(vizRAF);
+  (function draw(){
+    vizRAF=requestAnimationFrame(draw);
+    analyser.getByteFrequencyData(data);
+    ctx2.clearRect(0,0,cv.width,cv.height);
+    const c=cv.width/2, base=cv.width*0.40, N=56;
+    for(let i=0;i<N;i++){
+      const v=data[Math.floor(i*data.length/N)]/255;
+      const a=(i/N)*Math.PI*2 - Math.PI/2;
+      const len=Math.max(2*dpr, v*cv.width*0.085);
+      const x1=c+Math.cos(a)*base,       y1=c+Math.sin(a)*base;
+      const x2=c+Math.cos(a)*(base+len), y2=c+Math.sin(a)*(base+len);
+      ctx2.strokeStyle=`rgba(212,168,67,${0.18+v*0.8})`;
+      ctx2.lineWidth=2.2*dpr;
+      ctx2.lineCap='round';
+      ctx2.beginPath(); ctx2.moveTo(x1,y1); ctx2.lineTo(x2,y2); ctx2.stroke();
+    }
+  })();
+}
+function stopViz(){
+  cancelAnimationFrame(vizRAF); vizRAF=0;
+  const cv=$('viz');
+  if(cv) cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+}
+let tt;
+function showToast(m){
+  const e=$('toast');e.textContent=m;e.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),2000);
+}
+
+/* ---------- Media Session(鎖屏/耳機控制) ---------- */
+let artUrl=null;
+function updateMediaMeta(){
+  if(!('mediaSession' in navigator))return;
+  navigator.mediaSession.metadata=new MediaMetadata({
+    title:NAMES[cur],artist:'花彘醺',album:'FORMOSA PAIRING ROOM',
+    artwork:artUrl?[{src:artUrl,sizes:'512x512',type:'image/png'}]:[]
+  });
+}
+if('mediaSession' in navigator){
+  const ms=navigator.mediaSession;
+  const set=(a,f)=>{try{ms.setActionHandler(a,f);}catch(e){}};
+  set('play',()=>togglePlay());
+  set('pause',()=>audio.pause());
+  set('previoustrack',prevTrack);
+  set('nexttrack',nextTrack);
+  set('seekto',d=>{if(audio.duration&&d.seekTime!=null)audio.currentTime=d.seekTime;});
+  // 把專輯 SVG 轉成 PNG 給鎖屏用
+  try{
+    const xml=new XMLSerializer().serializeToString(document.querySelector('#album-art svg'));
+    const img=new Image();
+    img.onload=()=>{
+      const c=document.createElement('canvas');c.width=c.height=512;
+      const x=c.getContext('2d');
+      const g=x.createLinearGradient(0,0,512,512);
+      g.addColorStop(0,'#2a0808');g.addColorStop(1,'#4a1a08');
+      x.fillStyle=g;x.fillRect(0,0,512,512);
+      x.drawImage(img,90,90,332,332);
+      artUrl=c.toDataURL('image/png');
+      updateMediaMeta();
+    };
+    img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(xml);
+  }catch(e){}
+}
+
+/* ---------- 鍵盤快捷鍵(桌面) ---------- */
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.code==='Space'){e.preventDefault();togglePlay();}
+  else if(e.key==='ArrowRight'&&audio.duration)audio.currentTime=Math.min(audio.currentTime+10,audio.duration);
+  else if(e.key==='ArrowLeft')audio.currentTime=Math.max((audio.currentTime||0)-10,0);
+});
+
+/* ---------- 歌曲長度:逐首載入 metadata(不一次開 19 個連線) ---------- */
+(function probe(i){
+  if(i>=FILES.length)return;
+  if(durs[i]!=null){probe(i+1);return;}
+  const t=new Audio();
+  t.preload='metadata';
+  t.onloadedmetadata=()=>{durs[i]=t.duration;updateDur(i);t.removeAttribute('src');probe(i+1);};
+  t.onerror=()=>probe(i+1);
+  t.src=FILES[i];
+})(0);
+
+/* ---------- 初始化 ---------- */
+buildList();
+updateListState();
+updateNP();
+$('btn-shuffle').classList.toggle('on',shuffle);
+$('btn-shuffle').classList.toggle('dim',!shuffle);
+$('btn-repeat').classList.toggle('on',repeat>0);
+if(resumeTime>3)showToast(`上次聽到 ${NAMES[cur]} ${fmt(resumeTime)}`);
+
+// 第一次互動自動播放(點到曲目/按鈕時不搶播)
+function firstTap(e){
+  document.removeEventListener('click',firstTap);
+  document.removeEventListener('touchstart',firstTap);
+  if(playing||audio.currentSrc)return;
+  if(e.target.closest('.track-item,.play-btn,.ctrl-btn,.tab-btn,#prog-wrap,input'))return;
+  playIdx(cur,true);
+}
+document.addEventListener('click',firstTap);
+document.addEventListener('touchstart',firstTap);
+</script>
+</body>
+</html>
