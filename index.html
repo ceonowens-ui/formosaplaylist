@@ -215,7 +215,11 @@ const FILES=[
   "16.Slow Pour.mp3","17.City Lights Blur.mp3","18.Smooth Talk.mp3",
   "19.Whiskey & Velvet (1).mp3"
 ];
-const NAMES=FILES.map(f=>f.replace(/^\d+\./,'').replace(/\.mp3$/i,'').trim());
+const NAMES=FILES.map(f=>f.replace(/^\d+\./,'').replace(/\.mp3$/i,'').replace(/\s*\(\d+\)\s*$/,'').trim());
+// 自訂顯示歌名(只改顯示,不影響檔案)
+NAMES[2]='Nerve';        // 第 3 首
+NAMES[10]='Fall';        // 第 11 首
+NAMES[18]='Stay Still';  // 第 19 首
 const $=id=>document.getElementById(id);
 const audio=$('audio');
 const durs=new Array(FILES.length).fill(null);
