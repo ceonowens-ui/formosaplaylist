@@ -17,13 +17,13 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="apple-mobile-web-app-title" content="花彘醺">
-<link rel="preload" href="assets/fonts/chillk-subset.woff2?v=3" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/chillk-subset.woff2?v=5" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/trash-medium.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/cover.jpg" as="image">
 <link rel="preload" href="assets/thumb.jpg" as="image">
 <style>
 /* 中文：寒蟬寬黑體（OFL）；英文、數字：Trash Medium（只用在英數字） */
-@font-face{font-family:'ChillK';src:url('assets/fonts/chillk-subset.woff2?v=3') format('woff2');font-display:swap}
+@font-face{font-family:'ChillK';src:url('assets/fonts/chillk-subset.woff2?v=5') format('woff2');font-display:swap}
 @font-face{font-family:'Trash';src:url('assets/fonts/trash-medium.woff2') format('woff2');font-display:swap;unicode-range:U+0020-007E}
 
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -229,62 +229,87 @@ html{background:var(--bg)}
 .cbtn:active,.side:active,.opt:active{transform:scale(.9);filter:brightness(1.18);transition-duration:.12s}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
-/* ================= 花彘醺介紹頁（圖多字少） ================= */
+/* ================= 花彘醺介紹頁：在花花的一個晚上 ================= */
 .about{display:none}
 body.on-about .about{display:block}
 body.on-about #page-list{display:none}
 body.on-about .tabs{visibility:hidden}
 body.on-about .top.scrolled::before{opacity:0}
-.about.wrap{padding-top:0;padding-bottom:calc(170px + env(safe-area-inset-bottom))}
-/* 最上面：滿版照片，可以左右滑 */
-.ab-hero{position:relative;margin:0 -16px;height:min(56vh,560px)}
+.about.wrap{padding-top:0;padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+/* 序：滿版店內照片，可以左右滑 */
+.ab-hero{position:relative;margin:0 -16px;height:min(58vh,580px)}
 .ab-slides{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
 .ab-slides::-webkit-scrollbar{display:none}
 .ab-slides div{flex:0 0 100%;scroll-snap-align:start;background:#120a08 center/cover no-repeat}
-.ab-hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 62%,#000 100%)}
+.ab-hero::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 58%,#000 100%)}
 .ab-dots{position:absolute;left:0;right:0;bottom:58px;display:flex;justify-content:center;gap:7px;z-index:2}
 .ab-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);transition:background .25s,transform .25s}
 .ab-dots i.on{background:#fff;transform:scale(1.15)}
-/* 店名：logo 壓在照片下緣 */
 .ab-id{position:relative;z-index:3;margin-top:-44px;display:flex;align-items:flex-end;gap:14px}
 .ab-id img{width:88px;height:88px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 2px #000,0 0 0 3.5px rgba(255,255,255,.2),0 12px 30px rgba(0,0,0,.6)}
 .ab-id h2{font-size:32px;font-weight:400;line-height:1.1}
 .ab-id p{font-size:15px;color:rgba(255,255,255,.6);margin-top:4px}
-.ab-tag{font-size:17px;color:rgba(255,255,255,.82);margin-top:16px;line-height:1.5}
-/* 三顆主要按鈕：訂位、電話、地圖 */
+.ab-tag{font-size:20px;line-height:1.55;margin-top:18px}
+.ab-tag span{display:block;font-size:15px;color:rgba(255,255,255,.6);margin-top:6px}
 .ab-act{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
 .ab-act a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;height:78px;border-radius:20px;color:#fff;text-decoration:none;font-size:15px;
   background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.28);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
 .ab-act a:active{transform:scale(.94);transition-duration:.12s}
 .ab-act a.main{background:linear-gradient(180deg,rgba(240,204,110,.9),rgba(212,168,67,.66));color:#1A0E08;border-color:rgba(255,236,180,.55)}
 .ab-addr{font-size:14px;color:rgba(255,255,255,.55);margin-top:14px;line-height:1.6;text-align:center}
-/* 照片牆 */
-.ab-h{font-size:21px;font-weight:400;margin:36px 0 12px}
-.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.ab-grid .ph{position:relative;border-radius:16px;overflow:hidden;background:#120a08 center/cover no-repeat;aspect-ratio:4/5}
-.ab-grid .wide{grid-column:1/-1;aspect-ratio:4/3}
-.ab-grid .wide.thin{aspect-ratio:2/1}
-.ab-grid .ph span{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 12px;font-size:15px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.72))}
-/* 文字介紹 */
-.ab-story p{font-size:17px;line-height:1.8;color:rgba(255,255,255,.62)}
-.ab-story p+p{margin-top:12px}
-.ab-story b{font-weight:400;color:#fff}
-/* 招牌菜卡片：左右滑 */
-.dish-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -16px;padding:0 16px;scroll-padding:0 16px}
-.dish-row::-webkit-scrollbar{display:none}
-.dish-row::after{content:"";flex:0 0 4px}
-.dish{flex:0 0 68%;scroll-snap-align:start;border-radius:20px;overflow:hidden;background:#141010;border:1px solid rgba(255,255,255,.12)}
-.dish .ph{aspect-ratio:4/5;background:#120a08 center/cover no-repeat}
-.dish .tx{padding:14px 16px 18px}
-.dish b{display:block;font-size:18px;font-weight:400;line-height:1.35}
-.dish span{display:block;font-size:14px;color:rgba(255,255,255,.6);margin-top:6px;line-height:1.55}
-/* 怎麼來花花 */
-.ab-chips{display:flex;flex-wrap:wrap;gap:8px}
-.ab-chips+.ab-chips{margin-top:8px}
-.ab-chips span{font-size:15px;padding:9px 14px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
-.ab-book{display:flex;align-items:center;justify-content:center;height:58px;border-radius:29px;margin-top:26px;font-size:17px;text-decoration:none;color:#1A0E08;
+
+/* 每一章：章名、一句大字、一兩行小字 */
+.ch{margin-top:64px}
+.ch-no{display:block;font-size:15px;color:var(--gold-l);letter-spacing:2px}
+.ch h3{font-size:27px;font-weight:400;line-height:1.4;margin-top:8px}
+.ch p{font-size:16px;line-height:1.8;color:rgba(255,255,255,.66);margin-top:10px}
+.ch p b{font-weight:400;color:#fff}
+.ch .ph{position:relative;margin-top:18px;border-radius:20px;overflow:hidden;background:#120a08 center/cover no-repeat;aspect-ratio:4/5;border:1px solid rgba(255,255,255,.1)}
+.ch .ph.wide{aspect-ratio:4/3}
+.ch .ph.bleed{margin-left:-16px;margin-right:-16px;border-radius:0;border:0;aspect-ratio:4/5}
+.ch .ph span{position:absolute;left:0;right:0;bottom:0;padding:34px 16px 14px;font-size:16px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.75))}
+.ch .ph span small{display:block;font-size:14px;color:var(--gold-l);margin-top:2px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.two .ph{margin-top:0;aspect-ratio:3/4}
+/* 一 · 入座：三件不用擔心的事 */
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.facts div{padding:16px 8px;border-radius:18px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12)}
+.facts b{display:block;font-size:18px;font-weight:400}
+.facts span{display:block;text-wrap:balance;font-size:14px;color:rgba(255,255,255,.55);margin-top:4px}
+/* 三 · 配對卡：照片上寫「這道 × 這杯」，左右滑 */
+.pair-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:18px -16px 0;padding:0 16px;scroll-padding:0 16px}
+.pair-row::-webkit-scrollbar{display:none}
+.pair-row::after{content:"";flex:0 0 4px}
+.pair{flex:0 0 72%;scroll-snap-align:start;position:relative;border-radius:20px;overflow:hidden;aspect-ratio:3/4;background:#120a08 center/cover no-repeat;border:1px solid rgba(255,255,255,.1)}
+.pair div{position:absolute;left:0;right:0;bottom:0;padding:40px 16px 16px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.82))}
+.pair b{display:block;font-size:18px;font-weight:400;line-height:1.35}
+.pair i{display:block;font-style:normal;font-size:15px;color:var(--gold-l);margin-top:6px}
+.pair-note{font-size:15px;color:rgba(255,255,255,.55);margin-top:12px;line-height:1.7}
+/* 六 · 場合卡：每一張都能直接訂位 */
+.occ{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.occ a{display:block;padding:16px 14px;border-radius:18px;text-decoration:none;color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.13);box-shadow:inset 0 1px 0 rgba(255,255,255,.2);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.occ a:active{transform:scale(.96);transition-duration:.12s}
+.occ b{display:block;font-size:18px;font-weight:400}
+.occ span{display:block;text-wrap:balance;font-size:14px;color:rgba(255,255,255,.6);margin-top:4px;line-height:1.5}
+.occ em{display:block;font-style:normal;font-size:14px;color:var(--gold-l);margin-top:10px}
+/* 七 · 理念：只有字 */
+.belief{margin-top:72px;padding:40px 6px;text-align:center;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}
+.belief q{display:block;font-size:30px;line-height:1.45;quotes:none}
+.belief p{font-size:16px;line-height:1.85;color:rgba(255,255,255,.62);margin-top:16px}
+/* 尾聲：訂位 */
+.ab-book{display:flex;align-items:center;justify-content:center;height:60px;border-radius:30px;margin-top:20px;font-size:18px;text-decoration:none;color:#1A0E08;
   background:linear-gradient(180deg,rgba(240,204,110,.92),rgba(212,168,67,.7));border:1px solid rgba(255,236,180,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 28px rgba(212,168,67,.3);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
 .ab-book:active{transform:scale(.96);transition-duration:.12s}
+.ab-sub{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.ab-sub a{display:flex;white-space:nowrap;align-items:center;justify-content:center;gap:8px;height:52px;border-radius:26px;text-decoration:none;color:#fff;font-size:16px;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.15)}
+/* 滑過三顆按鈕之後，上方出現一顆小的「訂位」 */
+.ab-float{position:fixed;top:calc(env(safe-area-inset-top) + 13px);left:50%;transform:translate(-50%,-80px);z-index:16;height:44px;padding:0 22px;border-radius:22px;display:flex;align-items:center;gap:8px;font-size:16px;text-decoration:none;color:#1A0E08;
+  background:linear-gradient(180deg,rgba(240,204,110,.95),rgba(212,168,67,.78));border:1px solid rgba(255,236,180,.55);box-shadow:0 8px 24px rgba(0,0,0,.45);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+body.on-about.ab-past .ab-float{transform:translate(-50%,0)}
+/* 往下滑時每一章輕輕浮上來 */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 
 /* ================= 加到主畫面教學 ================= */
 .a2hs{position:fixed;inset:0;z-index:80;display:none;background:rgba(0,0,0,.78);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
@@ -356,16 +381,14 @@ body.on-about #nav-home{color:var(--gold-l)}
       <div style="background-image:url('assets/about/04-candles.webp')"></div>
       <div style="background-image:url('assets/about/03-dining.webp')"></div>
       <div style="background-image:url('assets/about/02-bar.webp')"></div>
-      <div style="background-image:url('assets/about/05-wellington.webp')"></div>
     </div>
-    <div class="ab-dots" id="ab-dots"><i class="on"></i><i></i><i></i><i></i></div>
+    <div class="ab-dots" id="ab-dots"><i class="on"></i><i></i><i></i></div>
   </section>
-
   <div class="ab-id">
     <img src="assets/logo-256.webp" alt="花彘醺" width="88" height="88">
     <div><h2>花彘醺</h2><p>Formosa Pairing Room</p></div>
   </div>
-  <p class="ab-tag">東區最講究餐酒搭配的餐酒館。<br>無菜單料理，清酒與台灣茶酒。</p>
+  <p class="ab-tag">東區巷子裡，點著蠟燭的那間。<span>無菜單料理 · 台灣茶酒 · 清酒與葡萄酒</span></p>
   <div class="ab-act">
     <a class="main" href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>訂位</a>
     <a href="tel:0227771488"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>電話</a>
@@ -373,39 +396,83 @@ body.on-about #nav-home{color:var(--gold-l)}
   </div>
   <p class="ab-addr">台北市忠孝東路四段 170 巷 6 弄 16 號<br>捷運忠孝敦化站 5 號出口</p>
 
-  <h3 class="ab-h">招牌料理</h3>
-  <div class="ab-grid">
-    <div class="ph wide" style="background-image:url('assets/about/05-wellington.webp')"><span>手工限量威靈頓牛排</span></div>
-    <div class="ph" style="background-image:url('assets/about/06-duck.webp')"><span>脆皮鴨胸</span></div>
-    <div class="ph" style="background-image:url('assets/about/07-lobster-risotto.webp')"><span>龍蝦蝦膏燉飯</span></div>
-    <div class="ph" style="background-image:url('assets/about/08-tuna-uni-sushi.webp')"><span>季節黑鮪魚壽司</span></div>
-    <div class="ph" style="background-image:url('assets/about/09-oysters.webp')"><span>肥美生蠔</span></div>
-    <div class="ph wide" style="background-image:url('assets/about/10-amuse.webp')"><span>時令前菜</span></div>
-  </div>
+  <section class="ch rv">
+    <span class="ch-no">一 · 入座</span>
+    <h3>點上蠟燭，<br>今晚不趕時間。</h3>
+    <p>想小酌一杯、吃點小食也可以；可以單點，也可以依預算請花花配餐。</p>
+    <div class="facts"><div><b>不設低消</b><span>多少都行</span></div><div><b>不限時</b><span>慢慢聊</span></div><div><b>開到很晚</b><span>晚來也不趕</span></div></div>
+  </section>
 
-  <h3 class="ab-h">為什麼這麼做</h3>
-  <div class="ab-story">
-    <p>花花 16 年來做無菜單料理，每一季都依時節，換上不同的菜。</p>
-    <p>我們把<b>台灣茶</b>的香、<b>日本料理</b>的旨味和<b>清酒</b>，放進同一張餐桌。</p>
-    <p>對花花來說，風土不是學理，是<b>活出來的</b>。所以用台灣這片土地的食材和故事入菜。</p>
-    <p>希望有一天，台灣茶也能成為世界的 <b>Pairing</b> 語言。</p>
-  </div>
+  <section class="ch rv">
+    <span class="ch-no">二 · 第一杯</span>
+    <h3>先來一杯，<br>台灣的茶。</h3>
+    <div class="ph bleed" style="background-image:url('assets/about/13-tea-pastry.webp')"><span>包種茶 × 綠豆糕 × 大稻埕<small>龍月堂百年甜點</small></span></div>
+    <p>一百多年前，包種茶從大稻埕出海，把<b>島嶼的香氣</b>帶往世界。花花把台灣茶釀成<b>茶酒</b>，配上一口老字號的甜點。</p>
+  </section>
 
-  <h3 class="ab-h">認識招牌菜</h3>
-  <div class="dish-row">
-    <div class="dish"><div class="ph" style="background-image:url('assets/about/05-wellington.webp')"></div><div class="tx"><b>手工限量威靈頓牛排</b><span>花花最多人指定的招牌，每天限量手工製作。</span></div></div>
-    <div class="dish"><div class="ph" style="background-image:url('assets/about/06-duck.webp')"></div><div class="tx"><b>私房熟成 14 日脆皮鴨胸</b><span>熟成 14 天，外皮酥脆。</span></div></div>
-    <div class="dish"><div class="ph" style="background-image:url('assets/about/07-lobster-risotto.webp')"></div><div class="tx"><b>招牌龍蝦蝦膏燉飯</b><span>蝦膏的香氣，煮進每一粒米。</span></div></div>
-    <div class="dish"><div class="ph" style="background-image:url('assets/about/08-tuna-uni-sushi.webp')"></div><div class="tx"><b>季節黑鮪魚壽司</b><span>時令日本料理，依季節變化。</span></div></div>
-    <div class="dish"><div class="ph" style="background-image:url('assets/about/09-oysters.webp')"></div><div class="tx"><b>肥美生蠔</b><span>當季海味，配一杯清酒剛好。</span></div></div>
-  </div>
+  <section class="ch rv">
+    <span class="ch-no">三 · 一口菜，一口酒</span>
+    <h3>每一道，<br>都有一杯為它而來。</h3>
+    <div class="pair-row">
+      <div class="pair" style="background-image:url('assets/about/14-foie-peach-tea.webp')"><div><b>鵝肝 × 水蜜桃 × 紫蘇梅</b><i>佐 紅玉茶酒</i></div></div>
+      <div class="pair" style="background-image:url('assets/about/19-prawn-oolong.webp')"><div><b>龜山島胭脂蝦</b><i>佐 南投紅烏龍茶酒</i></div></div>
+      <div class="pair" style="background-image:url('assets/about/18-tuna-yuzu-sake.webp')"><div><b>黑鮪魚壽司 × 柚子胡椒</b><i>佐 清酒</i></div></div>
+      <div class="pair" style="background-image:url('assets/about/17-cod-milt.webp')"><div><b>北海道鱈魚白子</b><i>秋冬空運限量</i></div></div>
+    </div>
+    <p class="pair-note">紅玉誕生於 921 地震後的南投魚池，有薄荷和肉桂的香氣。往左滑，看下一道。</p>
+  </section>
 
-  <h3 class="ab-h">怎麼來花花</h3>
-  <div class="ab-chips"><span>可單點</span><span>依預算配餐</span><span>不設低消</span><span>不限用餐時間</span><span>營業到很晚</span></div>
-  <div class="ab-chips"><span>小酌</span><span>約會</span><span>慶生</span><span>週年</span><span>商務聚餐</span><span>學術研討</span><span>包場</span></div>
-  <a class="ab-book" href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener">LINE 訂位</a>
+  <section class="ch rv">
+    <span class="ch-no">四 · 主菜</span>
+    <h3>然後，是大家<br>為它而來的那道。</h3>
+    <div class="ph wide" style="background-image:url('assets/about/05-wellington.webp')"><span>手工限量威靈頓牛排<small>每天限量，最多人指定</small></span></div>
+    <div class="two">
+      <div class="ph" style="background-image:url('assets/about/06-duck.webp')"><span>熟成 14 日<br>脆皮鴨胸</span></div>
+      <div class="ph" style="background-image:url('assets/about/07-lobster-risotto.webp')"><span>龍蝦蝦膏<br>燉飯</span></div>
+    </div>
+  </section>
+
+  <section class="ch rv">
+    <span class="ch-no">五 · 老客人才知道</span>
+    <h3>有些菜，<br>不在菜單上。</h3>
+    <div class="two">
+      <div class="ph" style="background-image:url('assets/about/16-abalone.webp')"><span>鮑魚甘露煮<small>花花私房</small></span></div>
+      <div class="ph" style="background-image:url('assets/about/15-tea-smoked-goose.webp')"><span>茶醺熟成鵝<small>梨山冷泡茶酒</small></span></div>
+    </div>
+    <p>私房料理和季節限定，每一季都不一樣。訂位時，問花花今天有什麼。</p>
+  </section>
+
+  <section class="ch rv">
+    <span class="ch-no">六 · 今晚為了誰</span>
+    <h3>有人生日嗎？</h3>
+    <div class="ph wide" style="background-image:url('assets/about/20-choux-tower.webp')"><span>巧克力瀑布泡芙<small>節日限定甜點</small></span></div>
+    <div class="occ">
+      <a href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener"><b>慶生</b><span>幫壽星準備甜點</span><em>訂位時說一聲</em></a>
+      <a href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener"><b>約會 · 週年</b><span>燭光，慢慢聊</span><em>訂位時說一聲</em></a>
+      <a href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener"><b>商務聚餐</b><span>依預算客製</span><em>LINE 討論</em></a>
+      <a href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener"><b>包場</b><span>研討、尾牙、宴會</span><em>LINE 討論</em></a>
+    </div>
+  </section>
+
+  <section class="belief rv">
+    <q>風土是活出來的。</q>
+    <p>18 年來，花花用這座島的茶、<br>海和山入菜。<br>如果你喜歡小酌，喜歡這片土地，<br>喜歡一些用心——<br>我們會遇見。</p>
+  </section>
+
+  <section class="ch rv">
+    <span class="ch-no">尾聲</span>
+    <h3>下次來，<br>留一個位子給你。</h3>
+    <div class="ph wide" style="background-image:url('assets/about/01-storefront.webp')"><span>找這扇紅色的門<small>忠孝東路四段 170 巷 6 弄 16 號</small></span></div>
+    <a class="ab-book" href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener">LINE 訂位</a>
+    <div class="ab-sub">
+      <a href="tel:0227771488"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>電話</a>
+      <a href="https://www.google.com/maps/search/?api=1&amp;query=%E5%8F%B0%E5%8C%97%E5%B8%82%E5%BF%A0%E5%AD%9D%E6%9D%B1%E8%B7%AF%E5%9B%9B%E6%AE%B5170%E5%B7%B76%E5%BC%8416%E8%99%9F" target="_blank" rel="noopener"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>地圖</a>
+    </div>
+    <p class="ab-addr">捷運忠孝敦化站 5 號出口，左轉再左轉<br>也可以打 02-2777-1479<br>或在 Instagram 私訊花花</p>
+  </section>
   <div class="credit">花彘醺｜Formosa Pairing Room</div>
 </main>
+<a class="ab-float" href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener" aria-label="LINE 訂位">訂位</a>
 
 <div class="nav" id="nav">
   <button class="cbtn" id="nav-home" aria-label="花彘醺介紹"><svg class="ic-music" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18.5a2.5 2.5 0 1 1-2-2.45V5.6a1 1 0 0 1 .76-.97l10-2.5A1 1 0 0 1 19 3.1v12.4a2.5 2.5 0 1 1-2-2.45V6.3l-8 2v10.2z"/></svg><svg class="ic-home" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 2.8 11a1 1 0 0 0 1.3 1.5l.9-.8V19a2 2 0 0 0 2 2h3v-5.5a2 2 0 0 1 4 0V21h3a2 2 0 0 0 2-2v-7.3l.9.8a1 1 0 0 0 1.3-1.5z"/></svg></button>
@@ -656,6 +723,7 @@ function setAbout(on){
   if(on===onAbout())return;
   closeSearch();
   document.body.classList.toggle('on-about',on);
+  if(!on)document.body.classList.remove('ab-past');
   $('nav-home').setAttribute('aria-label',on?'回到歌單':'花彘醺介紹');
   window.scrollTo(0,0);
 }
@@ -671,6 +739,15 @@ $('nav-home').addEventListener('click',()=>{ if($('np').classList.contains('open
 (function(){ // 最上面照片左右滑，下面的點跟著換
   const sl=$('ab-slides'),dots=[...$('ab-dots').children];
   sl.addEventListener('scroll',()=>{const k=Math.round(sl.scrollLeft/sl.clientWidth);dots.forEach((d,j)=>d.classList.toggle('on',j===k));},{passive:true});
+  // 三顆按鈕滑出畫面後，上方出現小的「訂位」；滑到最下面的大訂位鍵時收起來
+  const acts=document.querySelector('#page-about .ab-act'),book=document.querySelector('#page-about .ab-book');
+  addEventListener('scroll',()=>{if(!onAbout())return;document.body.classList.toggle('ab-past',acts.getBoundingClientRect().bottom<60&&book.getBoundingClientRect().top>innerHeight);},{passive:true});
+  // 每一章滑進畫面時輕輕浮上來（只做一次）
+  const rv=[...document.querySelectorAll('#page-about .rv')];
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{rootMargin:'0px 0px -12% 0px'});
+    rv.forEach(el=>io.observe(el));
+  }else rv.forEach(el=>el.classList.add('in'));
 })();
 addEventListener('scroll',()=>$('top').classList.toggle('scrolled',scrollY>8),{passive:true});
 
