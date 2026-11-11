@@ -40,14 +40,16 @@ svg{display:block}
 .top.scrolled::before{opacity:1}
 .tabs{flex:1;min-width:0;display:flex;gap:22px;overflow-x:auto;scrollbar-width:none;padding:0 14px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent)}
 .tabs::-webkit-scrollbar{display:none}
+.tabs::after{content:"";flex:0 0 1px}
 .tab{font-size:17px;color:rgba(255,255,255,.32);white-space:nowrap;padding:8px 0;transition:color .25s}
 .tab.on{color:#fff}
 #btn-share{color:#FFD873;background:linear-gradient(180deg,rgba(236,178,70,.55),rgba(170,110,25,.28));border-color:rgba(255,220,140,.45)}
 
 .wrap{max-width:480px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 84px) 16px calc(120px + env(safe-area-inset-bottom))}
 /* 大標題：灰字裡夾白字 */
-.headline{font-size:31px;line-height:1.32;color:rgba(255,255,255,.46);margin-top:6px;min-height:2.64em}
-.headline b{font-weight:400;color:#fff}
+/* 最上面：只放一個大 logo */
+.headline{margin-top:4px;line-height:0}
+.headline img{width:116px;height:116px;border-radius:50%;display:block;box-shadow:0 0 0 1.5px rgba(255,255,255,.18),0 14px 36px rgba(0,0,0,.55)}
 .sec{display:flex;align-items:center;gap:4px;font-size:21px;margin:30px 0 14px}
 
 /* 專輯方卡：左右滑換專輯 */
@@ -209,19 +211,61 @@ html{background:var(--bg)}
 .cbtn,.side,.opt{transition:transform .45s cubic-bezier(.34,1.56,.64,1),filter .2s}
 .cbtn:active,.side:active,.opt:active{transform:scale(.9);filter:brightness(1.18);transition-duration:.12s}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ================= 花彘醺介紹頁 ================= */
+.about{display:none}
+body.on-about .about{display:block}
+body.on-about #page-list{display:none}
+body.on-about .tabs{visibility:hidden}
+.ab-hero{position:relative;margin-top:6px;border-radius:26px;overflow:hidden;aspect-ratio:3/4;max-height:72vh;width:100%;background:#120a08 center/cover no-repeat;border:1px solid rgba(255,255,255,.12)}
+.ab-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.82) 100%)}
+.ab-hero .in{position:absolute;left:22px;right:22px;bottom:24px;z-index:1}
+.ab-hero img.lg{width:78px;height:78px;border-radius:50%;display:block;box-shadow:0 0 0 1.5px rgba(255,255,255,.22),0 10px 26px rgba(0,0,0,.6)}
+.ab-hero h2{font-size:30px;font-weight:400;margin-top:14px;line-height:1.25}
+.ab-hero p{font-size:16px;color:rgba(255,255,255,.75);margin-top:6px}
+.ab-lead{font-size:26px;line-height:1.45;color:rgba(255,255,255,.5);margin:30px 0 4px}
+.ab-lead b{font-weight:400;color:#fff}
+.ab-txt{font-size:16px;line-height:1.85;color:rgba(255,255,255,.72);margin-top:12px}
+.ab-img{width:100%;border-radius:22px;display:block;margin-top:16px;border:1px solid rgba(255,255,255,.12);background:#120a08}
+.ab-addr{font-size:15px;color:rgba(255,255,255,.6);margin-top:10px;line-height:1.6}
+.dish-row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -16px;padding:0 16px;scroll-padding:0 16px}
+.dish-row::-webkit-scrollbar{display:none}
+.dish-row::after{content:"";flex:0 0 4px}
+.dish{flex:0 0 68%;scroll-snap-align:start;border-radius:20px;overflow:hidden;background:#141010;border:1px solid rgba(255,255,255,.12)}
+.dish .ph{aspect-ratio:4/5;background:#120a08 center/cover no-repeat}
+.dish .tx{padding:14px 16px 18px}
+.dish b{display:block;font-size:18px;font-weight:400;line-height:1.35}
+.dish span{display:block;font-size:14px;color:rgba(255,255,255,.6);margin-top:6px;line-height:1.55}
+.ab-quote{margin-top:8px;padding:22px 20px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12)}
+.ab-quote q{display:block;font-size:20px;line-height:1.6;quotes:none}
+.ab-quote small{display:block;font-size:14px;color:rgba(212,168,67,.9);margin-top:10px}
+.ab-quote+.ab-quote{margin-top:12px}
+.ab-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.ab-two .ph{aspect-ratio:3/4;border-radius:18px;background:#120a08 center/cover no-repeat;border:1px solid rgba(255,255,255,.12)}
+.ab-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ab-chips span{font-size:15px;padding:9px 14px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.ab-cta{display:grid;gap:10px;margin-top:16px}
+.ab-cta a,.ab-cta button{display:flex;align-items:center;justify-content:center;gap:10px;height:56px;border-radius:28px;font-size:17px;color:#fff;text-decoration:none;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.3);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.ab-cta a:active,.ab-cta button:active{transform:scale(.96);transition-duration:.12s}
+.ab-cta .line{background:linear-gradient(180deg,rgba(6,199,85,.9),rgba(4,150,64,.8));border-color:rgba(120,255,170,.4)}
+.ab-cta .gold{background:linear-gradient(180deg,rgba(240,204,110,.85),rgba(212,168,67,.62));color:#1A0E08;border-color:rgba(255,236,180,.55)}
+#nav-home .ic-music{display:none}
+body.on-about #nav-home .ic-home{display:none}
+body.on-about #nav-home .ic-music{display:block}
+body.on-about #nav-home{color:var(--gold-l)}
 </style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div>
 
 <header class="top" id="top">
-  <button class="logo-btn" id="btn-logo" aria-label="花彘醺，回到最上面"><img src="assets/logo-256.webp" alt="花彘醺" width="44" height="44"></button>
+  <button class="cbtn" id="btn-more" aria-label="播放設定"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
   <nav class="tabs" id="tabs" aria-label="專輯"></nav>
   <button class="cbtn" id="btn-share" aria-label="分享"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg></button>
 </header>
 
 <main class="wrap" id="page-list">
-  <h1 class="headline" id="headline"></h1>
+  <h1 class="headline" id="headline"><img src="assets/logo-256.webp" alt="花彘醺" width="116" height="116"></h1>
 
   <h2 class="sec">全部專輯</h2>
   <div class="cards" id="cards"></div>
@@ -233,8 +277,67 @@ html{background:var(--bg)}
   <div class="credit">歌曲創作 Ce´on Owens</div>
 </main>
 
+<main class="wrap about" id="page-about" aria-label="花彘醺介紹">
+  <section class="ab-hero" style="background-image:url('assets/about/04-candles.webp')">
+    <div class="in">
+      <img class="lg" src="assets/logo-256.webp" alt="花彘醺">
+      <h2>花彘醺<br>Formosa Pairing Room</h2>
+      <p>東區最講究餐酒搭配的餐酒館</p>
+    </div>
+  </section>
+
+  <p class="ab-lead"><b>16 年</b>無菜單料理，把<b>台灣茶</b>的香與甘醇、<b>日本料理</b>的旨味，與<b>清酒</b>之美，融進花花的餐桌。</p>
+  <p class="ab-txt">每個季節，花花都會做出不同時節的美味。除了招牌菜，還有很多當季料理；可以單點，也可以依預算為你配餐。</p>
+
+  <h2 class="sec">花花的店</h2>
+  <img class="ab-img" src="assets/about/01-storefront.webp" alt="花彘醺店門口" loading="lazy">
+  <div class="ab-two">
+    <div class="ph" style="background-image:url('assets/about/02-bar.webp')"></div>
+    <div class="ph" style="background-image:url('assets/about/03-dining.webp')"></div>
+  </div>
+  <p class="ab-addr">台北市忠孝東路四段 170 巷 6 弄 16 號<br>捷運忠孝敦化站 5 號出口，左轉再左轉</p>
+
+  <h2 class="sec">招牌料理</h2>
+  <div class="dish-row">
+    <div class="dish"><div class="ph" style="background-image:url('assets/about/05-wellington.webp')"></div><div class="tx"><b>手工限量威靈頓牛排</b><span>花花最多人指定的招牌，每天限量手工製作。</span></div></div>
+    <div class="dish"><div class="ph" style="background-image:url('assets/about/06-duck.webp')"></div><div class="tx"><b>私房熟成 14 日脆皮鴨胸</b><span>熟成 14 天，外皮酥脆。</span></div></div>
+    <div class="dish"><div class="ph" style="background-image:url('assets/about/07-lobster-risotto.webp')"></div><div class="tx"><b>招牌龍蝦蝦膏燉飯</b><span>蝦膏的香氣，煮進每一粒米。</span></div></div>
+    <div class="dish"><div class="ph" style="background-image:url('assets/about/08-tuna-uni-sushi.webp')"></div><div class="tx"><b>季節黑鮪魚壽司</b><span>時令日本料理，依季節變化。</span></div></div>
+    <div class="dish"><div class="ph" style="background-image:url('assets/about/09-oysters.webp')"></div><div class="tx"><b>肥美生蠔</b><span>當季海味，配一杯清酒剛好。</span></div></div>
+    <div class="dish"><div class="ph" style="background-image:url('assets/about/10-amuse.webp')"></div><div class="tx"><b>時令前菜</b><span>每一季都不一樣的開場。</span></div></div>
+  </div>
+
+  <h2 class="sec">花花的理念</h2>
+  <div class="ab-quote"><q>風土從來不是艱澀的，也不只是學理。對花花而言，風土是活出來的。</q><small>用港口、山林、海洋，台灣這片土地的故事入菜</small></div>
+  <div class="ab-quote"><q>讓台灣茶也可以成為國際的 Pairing 語言。</q><small>向遠道而來的旅客，介紹福爾摩沙的美好</small></div>
+
+  <h2 class="sec">清酒、葡萄酒、台灣茶酒</h2>
+  <div class="ab-two">
+    <div class="ph" style="background-image:url('assets/about/11-sake.webp')"></div>
+    <div class="ph" style="background-image:url('assets/about/12-cocktail.webp')"></div>
+  </div>
+  <p class="ab-txt">清酒、紅白葡萄酒、台灣茶酒專門。像是包種茶柚子花白葡萄酒、鐵觀音奶茶酒，都是只有台灣才有的滋味。</p>
+
+  <h2 class="sec">怎麼來花花</h2>
+  <div class="ab-chips"><span>可單點</span><span>依預算配餐</span><span>不設低消</span><span>不限用餐時間</span><span>營業到很晚</span></div>
+  <div class="ab-chips"><span>小酌</span><span>約會</span><span>慶生</span><span>週年</span><span>商務聚餐</span><span>學術研討</span><span>包場</span></div>
+
+  <h2 class="sec">在花花聽的音樂</h2>
+  <p class="ab-txt">三張專輯，從開門的第一杯酒，到打烊前的最後一道菜。</p>
+  <div class="ab-cta"><button class="gold" id="ab-music">聽花花的歌單</button></div>
+
+  <h2 class="sec">訂位</h2>
+  <div class="ab-cta">
+    <a class="line" href="https://lin.ee/AWS8HWe" target="_blank" rel="noopener">LINE 訂位 @hwa_tze_xun</a>
+    <a href="tel:0227771488">打電話 02-2777-1488</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=%E5%8F%B0%E5%8C%97%E5%B8%82%E5%BF%A0%E5%AD%9D%E6%9D%B1%E8%B7%AF%E5%9B%9B%E6%AE%B5170%E5%B7%B76%E5%BC%8416%E8%99%9F" target="_blank" rel="noopener">在地圖上打開</a>
+  </div>
+  <p class="ab-addr">也可以打 02-2777-1479，或在 Instagram、Facebook 私訊花花。</p>
+  <div class="credit">花彘醺｜Formosa Pairing Room</div>
+</main>
+
 <div class="nav" id="nav">
-  <button class="cbtn" id="nav-home" aria-label="回到最上面"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 2.8 11a1 1 0 0 0 1.3 1.5l.9-.8V19a2 2 0 0 0 2 2h3v-5.5a2 2 0 0 1 4 0V21h3a2 2 0 0 0 2-2v-7.3l.9.8a1 1 0 0 0 1.3-1.5z"/></svg></button>
+  <button class="cbtn" id="nav-home" aria-label="花彘醺介紹"><svg class="ic-music" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18.5a2.5 2.5 0 1 1-2-2.45V5.6a1 1 0 0 1 .76-.97l10-2.5A1 1 0 0 1 19 3.1v12.4a2.5 2.5 0 1 1-2-2.45V6.3l-8 2v10.2z"/></svg><svg class="ic-home" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.2 2.8 11a1 1 0 0 0 1.3 1.5l.9-.8V19a2 2 0 0 0 2 2h3v-5.5a2 2 0 0 1 4 0V21h3a2 2 0 0 0 2-2v-7.3l.9.8a1 1 0 0 0 1.3-1.5z"/></svg></button>
   <div class="pill" id="pill">
     <div class="thumb" id="p-thumb"></div>
     <div class="p-info" id="p-info">
@@ -438,14 +541,14 @@ function setAlbum(k){
   album=k;
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',j===k));
   // 分頁變多時，讓選到的分頁捲進畫面
-  const on=document.querySelector('.tab.on'); if(on)on.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
-  $('headline').innerHTML=LIB[k].head;
+  const on=document.querySelector('.tab.on'),tb=$('tabs'); if(on){const r=on.getBoundingClientRect(),b=tb.getBoundingClientRect(); tb.scrollLeft+=(r.left-b.left)-(b.width-r.width)/2;}
   $('empty').style.display='none';
   buildList();
 }
 
 /* ---------- 搜尋:按右下角放大鏡,迷你播放器變成搜尋框 ---------- */
 function openSearch(){
+  if(onAbout())showAbout(false);
   $('nav').classList.add('searching');$('search').focus();
   const y=$('sec-songs').getBoundingClientRect().top+scrollY-90;
   if(scrollY<y)window.scrollTo({top:y,behavior:'smooth'});
@@ -463,7 +566,19 @@ function filter(q){
 }
 $('search').addEventListener('input',function(){filter(this.value);});
 $('search').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();});
-$('nav-home').addEventListener('click',()=>{closeNP();closeSearch();goAlbum(0);window.scrollTo({top:0,behavior:'smooth'});});
+/* ---------- 兩頁：歌單 ↔ 花彘醺介紹（按左下角房子鍵切換） ---------- */
+const onAbout=()=>document.body.classList.contains('on-about');
+function showAbout(on,fromPop){
+  if(on===onAbout())return;
+  closeSearch();
+  document.body.classList.toggle('on-about',on);
+  $('nav-home').setAttribute('aria-label',on?'回到歌單':'花彘醺介紹');
+  window.scrollTo(0,0);
+  if(on&&!fromPop){try{history.pushState({about:1},'');}catch(e){}}
+  if(!on&&!fromPop&&history.state&&history.state.about){try{history.back();}catch(e){}}
+}
+$('nav-home').addEventListener('click',()=>{ if($('np').classList.contains('open')){closeNP();return;} showAbout(!onAbout()); });
+$('ab-music').addEventListener('click',()=>showAbout(false));
 addEventListener('scroll',()=>$('top').classList.toggle('scrolled',scrollY>8),{passive:true});
 
 /* ---------- 播放控制 ---------- */
@@ -638,7 +753,7 @@ function closeNP(fromPop){
   $('np').classList.remove('open');
   if(!fromPop&&history.state&&history.state.np){try{history.back();}catch(e){}}
 }
-window.addEventListener('popstate',()=>closeNP(true));
+window.addEventListener('popstate',()=>{ if($('np').classList.contains('open'))closeNP(true); else if(onAbout())showAbout(false,true); });
 $('p-info').addEventListener('click',openNP);
 $('p-thumb').addEventListener('click',openNP);
 $('np-close').addEventListener('click',()=>closeNP());
@@ -668,7 +783,7 @@ $('btn-prev').addEventListener('click',prevTrack);
 /* ---------- 更多選單 ---------- */
 function openMenu(){ $('scrim').classList.add('show'); $('menu').classList.add('show'); }
 function closeMenu(){ $('scrim').classList.remove('show'); $('menu').classList.remove('show'); }
-$('btn-logo').addEventListener('click',()=>{closeSearch();goAlbum(0);window.scrollTo({top:0,behavior:'smooth'});});
+$('btn-more').addEventListener('click',openMenu);
 $('scrim').addEventListener('click',closeMenu);
 document.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{setRepeat(+o.dataset.r);closeMenu();showToast(o.firstChild.textContent.trim());}));
 
