@@ -1,12 +1,18 @@
-// 花彘醺 Playlist：把歌存在手機裡，網路斷一下也不會停
-// 只處理 .mp3；網頁本身照常從網路拿，改版馬上生效
-const CACHE = 'hzx-audio-v2';
+// 花彘醺：讓歌不中斷，也讓網站沒網路時打得開
+// 1. 歌：播到的那首和下一首整首存在手機裡，網路斷一下也不會停
+// 2. 網頁本身：每次都先拿最新版；沒網路才用上次存的
+// 3. 圖片、字型：先用手機裡存的（馬上出現），背後再悄悄更新
+const AUDIO = 'hzx-audio-v2';
+const SHELL = 'hzx-shell-v1';
 const MAX_SONGS = 8; // 最多存 8 首（約 40MB），舊的自動刪
+const PAGE = new URL('./', self.registration.scope).href;
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil((async () => {
   // 刪掉舊版留下的快取，不佔手機空間
-  for (const k of await caches.keys()) if (k.startsWith('hzx-audio-') && k !== CACHE) await caches.delete(k);
+  for (const k of await caches.keys()) {
+    if ((k.startsWith('hzx-audio-') && k !== AUDIO) || (k.startsWith('hzx-shell-') && k !== SHELL)) await caches.delete(k);
+  }
   await self.clients.claim();
 })()));
 
@@ -19,7 +25,7 @@ function fill(url, keep) {
   const key = keyOf(url);
   if (filling.has(key)) return filling.get(key);
   const job = (async () => {
-    const cache = await caches.open(CACHE);
+    const cache = await caches.open(AUDIO);
     if (await cache.match(key)) return;
     const res = await fetch(key, { cache: 'no-store' });
     if (!res.ok || res.status !== 200) return;
@@ -50,14 +56,46 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== location.origin || !/\.mp3$/i.test(url.pathname)) return;
-  if (url.searchParams.get('sw') === '0') return; // 重連第 2 次起：直接走網路，不用手機裡的
-  e.respondWith(serve(req));
+  if (url.origin !== location.origin) return;
+  if (req.mode === 'navigate') { e.respondWith(page(req)); return; }
+  if (/\.mp3$/i.test(url.pathname)) {
+    if (url.searchParams.get('sw') === '0') return; // 重連第 2 次起：直接走網路，不用手機裡的
+    e.respondWith(song(req));
+    return;
+  }
+  if (/sw\.js$/.test(url.pathname) || req.headers.has('range')) return;
+  e.respondWith(asset(e, req));
 });
 
-async function serve(req) {
+// 網頁：先拿最新版（GitHub 會把舊頁面留 10 分鐘，所以不用瀏覽器存的）；沒網路才用上次的
+async function page(req) {
+  const cache = await caches.open(SHELL);
   try {
-    const cache = await caches.open(CACHE);
+    const res = await fetch(req, { cache: 'no-store' });
+    if (res.ok && res.type === 'basic') cache.put(PAGE, res.clone()).catch(() => {});
+    return res;
+  } catch (err) {
+    const hit = await cache.match(PAGE);
+    if (hit) return hit;
+    throw err;
+  }
+}
+
+// 圖片、字型、設定檔：有存就先給，背後再更新；沒存過就上網拿
+async function asset(e, req) {
+  const cache = await caches.open(SHELL);
+  const hit = await cache.match(req, { ignoreSearch: false });
+  const fresh = fetch(req).then(res => {
+    if (res.ok && res.status === 200 && res.type === 'basic') cache.put(req, res.clone()).catch(() => {});
+    return res;
+  });
+  if (hit) { e.waitUntil(fresh.catch(() => {})); return hit; }
+  return fresh;
+}
+
+async function song(req) {
+  try {
+    const cache = await caches.open(AUDIO);
     const hit = await cache.match(keyOf(req.url));
     if (hit) return await slice(hit, req.headers.get('range'));
   } catch (err) {}
