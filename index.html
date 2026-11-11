@@ -9,6 +9,8 @@
 <title>花彘醺 Playlist</title>
 <link rel="icon" type="image/png" href="assets/logo-64.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="花彘醺">
 <link rel="preload" href="assets/fonts/chillk-subset.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/trash-medium.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/cover.jpg" as="image">
@@ -268,6 +270,42 @@ body.on-about .top.scrolled::before{opacity:0}
 .ab-book{display:flex;align-items:center;justify-content:center;height:58px;border-radius:29px;margin-top:26px;font-size:17px;text-decoration:none;color:#1A0E08;
   background:linear-gradient(180deg,rgba(240,204,110,.92),rgba(212,168,67,.7));border:1px solid rgba(255,236,180,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 10px 28px rgba(212,168,67,.3);transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
 .ab-book:active{transform:scale(.96);transition-duration:.12s}
+
+/* ================= 加到主畫面教學 ================= */
+.a2hs{position:fixed;inset:0;z-index:80;display:none;background:rgba(0,0,0,.78);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.a2hs.show{display:block;animation:a2hsIn .25s ease}
+@keyframes a2hsIn{from{opacity:0}to{opacity:1}}
+.a2hs-card{position:absolute;left:12px;right:12px;max-width:440px;margin:0 auto;padding:22px 20px 16px;border-radius:24px;color:#fff;
+  background:linear-gradient(180deg,rgba(58,40,30,.96),rgba(22,15,12,.97));border:1px solid rgba(255,236,180,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 18px 60px rgba(0,0,0,.7)}
+.a2hs-card.at-top{top:max(14px,env(safe-area-inset-top))}
+.a2hs-card.at-bottom{bottom:max(14px,env(safe-area-inset-bottom))}
+.a2hs-card.at-center{top:50%;transform:translateY(-50%)}
+.a2hs-head{display:flex;align-items:center;gap:14px;padding-right:36px}
+.a2hs-head img{width:56px;height:56px;border-radius:14px;flex-shrink:0;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.a2hs-head h2{font-size:20px;font-weight:400;line-height:1.3}
+.a2hs-lead{font-size:15px;color:rgba(255,255,255,.7);margin-top:12px;line-height:1.6}
+.a2hs-x{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08)}
+.a2hs-steps{list-style:none;padding:0;margin:16px 0 6px;display:flex;flex-direction:column;gap:13px}
+.a2hs-steps li{display:flex;align-items:center;gap:12px;font-size:16px;line-height:1.4}
+.a2hs-steps .n{flex-shrink:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;color:#1A0E08;background:linear-gradient(180deg,#F0CC6E,#D4A843)}
+.a2hs-steps svg{flex-shrink:0;color:var(--gold-l)}
+.a2hs-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px}
+.a2hs-ok{height:46px;padding:0 24px;border-radius:23px;font-size:16px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}
+.a2hs-ok.gold{color:#1A0E08;background:linear-gradient(180deg,rgba(240,204,110,.95),rgba(212,168,67,.75));border-color:rgba(255,236,180,.55)}
+.a2hs-alt{font-size:14px;color:rgba(255,255,255,.62);padding:12px 4px;text-decoration:underline;text-underline-offset:3px}
+/* 指著瀏覽器自己的按鈕 */
+.a2hs-pt{position:absolute;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:16px;color:#fff;pointer-events:none;animation:a2hsDown 1.1s ease-in-out infinite}
+.a2hs-pt span{padding:8px 14px;border-radius:20px;white-space:nowrap;color:#1A0E08;background:linear-gradient(180deg,#F0CC6E,#D4A843);box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.a2hs-pt svg{color:#F0CC6E;filter:drop-shadow(0 2px 6px rgba(0,0,0,.7))}
+.a2hs-pt.bottom-center{bottom:max(6px,env(safe-area-inset-bottom));left:0;right:0}
+.a2hs-pt.bottom-left{bottom:max(6px,env(safe-area-inset-bottom));left:16%;align-items:flex-start}
+.a2hs-pt.bottom-right{bottom:max(6px,env(safe-area-inset-bottom));right:10px;align-items:flex-end}
+.a2hs-pt.top-right{top:max(6px,env(safe-area-inset-top));right:10px;align-items:flex-end;animation-name:a2hsUp}
+.a2hs-pt.bottom-right svg,.a2hs-pt.top-right svg{margin-right:12px}
+.a2hs-pt.bottom-left svg{margin-left:14px}
+@keyframes a2hsDown{0%,100%{transform:translateY(-6px)}50%{transform:translateY(4px)}}
+@keyframes a2hsUp{0%,100%{transform:translateY(6px)}50%{transform:translateY(-4px)}}
+@media (prefers-reduced-motion:reduce){.a2hs-pt{animation:none}}
 #nav-home .ic-music{display:none}
 body.on-about #nav-home .ic-home{display:none}
 body.on-about #nav-home .ic-music{display:block}
@@ -404,9 +442,21 @@ body.on-about #nav-home{color:var(--gold-l)}
   <button class="opt" data-r="1">全部重複<span class="dot"></span></button>
   <button class="opt" data-r="2">單曲重複<span class="dot"></span></button>
   <button class="opt" data-r="0">播完就停<span class="dot"></span></button>
+  <button class="opt" id="opt-a2hs">加到主畫面<span></span></button>
   <div class="credit">Songs created by Ce´on Owens</div>
 </div>
 
+
+<div class="a2hs" id="a2hs" role="dialog" aria-modal="true" aria-labelledby="a2hs-title">
+  <section class="a2hs-card" id="a2hs-card">
+    <button class="a2hs-x" id="a2hs-x" aria-label="關閉"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+    <div class="a2hs-head"><img src="assets/apple-touch-icon.png" alt=""><h2 id="a2hs-title">把花彘醺放到主畫面</h2></div>
+    <p class="a2hs-lead" id="a2hs-lead">之後點圖示就能聽歌、訂位，像 App 一樣。</p>
+    <ol class="a2hs-steps" id="a2hs-steps"></ol>
+    <div class="a2hs-foot"><button class="a2hs-ok" id="a2hs-ok">知道了</button><button class="a2hs-alt" id="a2hs-alt">按鈕不在這裡？</button></div>
+  </section>
+  <div class="a2hs-pt" id="a2hs-pt" aria-hidden="true"></div>
+</div>
 <div class="toast" id="toast"></div>
 <audio id="audio" preload="none"></audio>
 
@@ -652,7 +702,7 @@ function setShuffle(on){
 }
 function setRepeat(r){
   repeat=r;
-  document.querySelectorAll('.opt').forEach(o=>o.classList.toggle('on',+o.dataset.r===repeat));
+  document.querySelectorAll('.opt[data-r]').forEach(o=>o.classList.toggle('on',+o.dataset.r===repeat));
   $('btn-repeat').classList.toggle('on',repeat>0);
   $('rep-one').style.display=repeat===2?'':'none';
   updateQueue();saveState();
@@ -805,7 +855,7 @@ function openMenu(){ $('scrim').classList.add('show'); $('menu').classList.add('
 function closeMenu(){ $('scrim').classList.remove('show'); $('menu').classList.remove('show'); }
 $('btn-more').addEventListener('click',openMenu);
 $('scrim').addEventListener('click',closeMenu);
-document.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{setRepeat(+o.dataset.r);closeMenu();showToast(o.firstChild.textContent.trim());}));
+document.querySelectorAll('.opt[data-r]').forEach(o=>o.addEventListener('click',()=>{setRepeat(+o.dataset.r);closeMenu();showToast(o.firstChild.textContent.trim());}));
 
 /* ---------- 唱片外圈(轉圈拖曳跳轉) ---------- */
 // 手指放在唱片外圈附近才算拖進度,中間不算,避免誤觸
@@ -878,6 +928,80 @@ function prefetch(i){
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{});
 }
+
+
+/* ---------- 加到主畫面教學：第一次打開時跳出，指著瀏覽器自己的按鈕 ---------- */
+(function(){
+  const KEY='hzx-a2hs-v1';
+  const seen=()=>{try{return localStorage.getItem(KEY)==='1'}catch(e){return false}};
+  const markSeen=()=>{try{localStorage.setItem(KEY,'1')}catch(e){}};
+  const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  const ua=navigator.userAgent, touchMac=navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1;
+  const ios=/iPhone|iPad|iPod/i.test(ua)||touchMac, ipad=/iPad/i.test(ua)||touchMac, android=/Android/i.test(ua);
+  const line=/\bLine\//i.test(ua), inapp=line||/FBAN|FBAV|FB_IAB|Instagram|MicroMessenger|Barcelona/i.test(ua);
+  const otherIos=/CriOS|FxiOS|EdgiOS/i.test(ua), ver=Number((/Version\/(\d+)/.exec(ua)||[])[1]||0);
+  const I={
+    share:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>',
+    plus:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+    check:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    dots:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>',
+    vdots:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="19" r="1.9"/></svg>',
+    lines:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="7" x2="19" y2="7"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="17" x2="15" y2="17"/></svg>',
+    open:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><line x1="10" y1="14" x2="20" y2="4"/><path d="M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5"/></svg>',
+    down:'<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="4" x2="12" y2="20"/><polyline points="5 13 12 20 19 13"/></svg>',
+    up:'<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="4"/><polyline points="5 11 12 4 19 11"/></svg>'
+  };
+  // 不同瀏覽器的「分享」藏在不同地方
+  const G={
+    'ios-bar':  {pt:'bottom-left',  label:'點網址列左邊的 ≡', steps:[[I.lines,'點網址列左邊的「≡」'],[I.share,'選「分享」'],[I.plus,'點「檢視較多」，選「加入主畫面」'],[I.check,'點右上角的「加入」']]},
+    'ios-menu': {pt:'bottom-right', label:'點這裡的 ⋯',       steps:[[I.dots,'點右下角的「⋯」'],[I.share,'選「分享」'],[I.plus,'點「檢視較多」，選「加入主畫面」'],[I.check,'點右上角的「加入」']]},
+    'ios-bottom':{pt:'bottom-center',label:'點這裡的分享鈕',  steps:[[I.share,'點下方的「分享」'],[I.plus,'往下滑，選「加入主畫面」'],[I.check,'點右上角的「加入」']]},
+    'ios-top':  {pt:'top-right',    label:'點這裡的分享鈕',   steps:[[I.share,'點右上角的「分享」'],[I.plus,'選「加入主畫面」'],[I.check,'點「加入」']]},
+    'android':  {pt:'top-right',    label:'點這裡的 ⋮',       steps:[[I.vdots,'點右上角的「⋮」'],[I.plus,'選「加到主畫面」或「安裝應用程式」'],[I.check,'點「安裝」']]}
+  };
+  const IOS=['ios-bar','ios-menu','ios-bottom','ios-top'];
+  let layout=inapp?'inapp':ios?(ipad||otherIos?'ios-top':ver>=27?'ios-bar':ver>=26?'ios-menu':'ios-bottom'):android?'android':'desktop';
+  let installer=null;
+  addEventListener('beforeinstallprompt',e=>{e.preventDefault();installer=e;});
+  addEventListener('appinstalled',()=>{markSeen();close();});
+  const box=$('a2hs'),card=$('a2hs-card'),pt=$('a2hs-pt'),steps=$('a2hs-steps'),ok=$('a2hs-ok'),alt=$('a2hs-alt');
+  function render(){
+    const g=G[layout]; let place='at-center';
+    pt.innerHTML='';pt.className='a2hs-pt';ok.className='a2hs-ok';ok.textContent='知道了';alt.style.display='none';
+    if(layout==='inapp'){
+      $('a2hs-title').textContent=`先用 ${ios?'Safari':'Chrome'} 打開`;
+      $('a2hs-lead').textContent='這裡是 App 裡的瀏覽器，沒辦法加到主畫面。';
+      if(line){steps.innerHTML='';ok.className='a2hs-ok gold';ok.textContent=`用 ${ios?'Safari':'Chrome'} 打開`;}
+      else steps.innerHTML=[[I.dots,'點右上角的「⋯」'],[I.open,`選「用${ios?' Safari ':'瀏覽器'}開啟」`]].map((x,i)=>`<li><span class="n">${i+1}</span>${x[0]}${x[1]}</li>`).join('');
+    }else{
+      $('a2hs-title').textContent=layout==='desktop'?'把花彘醺放到桌面':'把花彘醺放到主畫面';
+      $('a2hs-lead').textContent='之後點圖示就能聽歌、訂位，像 App 一樣。';
+      if(installer&&(layout==='android'||layout==='desktop')){steps.innerHTML='';ok.className='a2hs-ok gold';ok.textContent='加到主畫面';}
+      else if(g){
+        steps.innerHTML=g.steps.map((x,i)=>`<li><span class="n">${i+1}</span>${x[0]}${x[1]}</li>`).join('');
+        pt.classList.add(g.pt);
+        pt.innerHTML=g.pt==='top-right'?I.up+`<span>${g.label}</span>`:`<span>${g.label}</span>`+I.down;
+        place=g.pt==='top-right'?'at-bottom':'at-top';
+        if(ios)alt.style.display='';
+      }else steps.innerHTML=`<li><span class="n">1</span>${I.dots}打開瀏覽器選單</li><li><span class="n">2</span>${I.plus}選「安裝」或「加入 Dock」</li>`;
+    }
+    card.className='a2hs-card '+place;
+  }
+  function open(){render();box.classList.add('show');}
+  function close(){box.classList.remove('show');markSeen();}
+  window.showA2HS=open;
+  $('a2hs-x').addEventListener('click',close);
+  box.addEventListener('click',e=>{if(e.target===box)close();});
+  alt.addEventListener('click',()=>{layout=IOS[(IOS.indexOf(layout)+1)%IOS.length];render();});
+  ok.addEventListener('click',async()=>{
+    if(layout==='inapp'&&line){const u=new URL(location.href);u.searchParams.set('openExternalBrowser','1');location.href=u.href;return;}
+    if(installer&&(layout==='android'||layout==='desktop')){try{installer.prompt();const c=await installer.userChoice;installer=null;if(c.outcome==='accepted'){close();return;}}catch(e){installer=null;}render();return;}
+    close();
+  });
+  $('opt-a2hs').addEventListener('click',()=>{closeMenu();setTimeout(open,250);});
+  // 第一次用手機打開才自動跳出；已經從主畫面打開、或看過了就不再跳
+  if(!standalone()&&!seen()&&(ios||android||inapp))setTimeout(open,1200);
+})();
 
 /* ---------- 初始化 ---------- */
 buildAlbums();
